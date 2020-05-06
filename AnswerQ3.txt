@@ -1,0 +1,21 @@
+function solutionQ3(relation){
+answer = 0;
+
+for(var i = 0 ; i < relation.length;i++){
+    var temp = relation[i];
+    var tempRelation = relation.slice();
+    tempRelation.splice(i,1);
+    // console.log(temp)
+    // console.log(tempRelation)
+    
+    var isReqAsCandidateKey = tempRelation.filter((result)=>{
+        return result[0] == temp[0] || (result[2] == temp[2] && result[3] == temp[3]);
+    });
+    // console.log('isReqAsCandidateKey' ,isReqAsCandidateKey)
+    
+    if (isReqAsCandidateKey.length == 0)
+    answer++;
+}
+
+return answer;
+}

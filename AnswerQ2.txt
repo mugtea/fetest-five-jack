@@ -1,0 +1,36 @@
+    
+    function solutionsQ2(N, params){
+    var answer = [];
+        paramsLeft = params.length
+    tempResult = [];
+    for(var i = 0 ; i<N;i++){
+        var temp = {};
+        stageCounter = params.filter((res)=>{
+            return res == i+1
+        }).length;
+        temp.failureRate = stageCounter/paramsLeft;
+        temp.stage = i+1;
+        paramsLeft = paramsLeft - stageCounter;
+        tempResult.push(temp);
+    }
+
+    function compare(a,b){
+        const failureRateA = a.failureRate;
+        const failureRateB = b.failureRate;
+        
+        let comparison = 0;
+        if (failureRateA > failureRateB)
+        comparison = -1
+        
+        if (failureRateB > failureRateA)
+        comparison = 1
+        return comparison;
+        }
+
+        answer = tempResult.sort(compare);
+        answer = answer.map((res)=>{
+            return res.stage;
+        })
+        return answer;
+    }
+
