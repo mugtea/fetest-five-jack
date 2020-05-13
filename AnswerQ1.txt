@@ -1,33 +1,35 @@
 
 function solutionQ1(params) {
-    var listUserInChat = [];
+    if (params.length < 1 || params.length > 200000) 
+    return 'Record must containing the following strings between 1 ~ 100,000.'
+    
     var contentChat = [];
-        var suffixMsg = ["came in", "has left"];
-    for(var i = 0; i < params.length;i++){
+    var suffixMsg = ["came in", "has left"];
+    for (var i = 0; i < params.length; i++) {
         var pm = params[i];
         var splittedData = pm.split(' ');
         var uid = splittedData[1];
         var username = splittedData[2];
         var message = suffixMsg[0];
-        
+
         if (pm.indexOf('Enter') > -1) {
             contentChat = contentChat.map(function (result) {
-                return result.uid == uid ? { uid: result.uid, username: username, msg: result.msg } : result;})
+                return result.uid == uid ? { uid: result.uid, username: username, msg: result.msg } : result;
+            })
             addContentChat(uid, username, message);
         }
-         else if (pm.indexOf('Leave') > -1) {
-             uid = splittedData[1];
-             username = contentChat.filter(function (data) { return data.uid == uid})[0].username
-             message = suffixMsg[1];
+        else if (pm.indexOf('Leave') > -1) {
+            username = contentChat.filter(function (data) { return data.uid == uid })[0].username
+            message = suffixMsg[1];
             addContentChat(uid, username, message);
-            }
+        }
         else if (pm.indexOf('Change') > -1) {
             contentChat = contentChat.map(function (result) {
                 return result.uid == uid ? { uid: result.uid, username: username, msg: result.msg } : result;
             })
         }
     }
-    
+
     function addContentChat(uid, username, msg) {
         contentChat.push({
             uid: uid,
@@ -35,6 +37,5 @@ function solutionQ1(params) {
             msg: msg
         })
     }
-return contentChat.map((res)=>{return res.username.concat(' ', res.msg)})
+    return contentChat.map((res) => { return res.username.concat(' ', res.msg) })
 }
-

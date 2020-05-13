@@ -1,21 +1,73 @@
-function solutionQ3(relation){
-answer = 0;
+function solutionQ3(item) {
+    pKeyCounter = 0;
+    isStillLoop = true;
+    idx = 0;
+    col = [idx]
+    while (isStillLoop) {
+        var currentCol = getCurrentCol(item, col)
 
-for(var i = 0 ; i < relation.length;i++){
-    var temp = relation[i];
-    var tempRelation = relation.slice();
-    tempRelation.splice(i,1);
-    // console.log(temp)
-    // console.log(tempRelation)
-    
-    var isReqAsCandidateKey = tempRelation.filter((result)=>{
-        return result[0] == temp[0] || (result[2] == temp[2] && result[3] == temp[3]);
-    });
-    // console.log('isReqAsCandidateKey' ,isReqAsCandidateKey)
-    
-    if (isReqAsCandidateKey.length == 0)
-    answer++;
-}
+        if (idx < 20){
+            if (isExistDupData(currentCol)) {
+                col = col.concat(idx + 1);
+            } else {
+                    if (isValidStrLength(currentCol) && isValidStrLowerCase(currentCol)) {
+                        pKeyCounter++;
+                    col = [idx + 1]
+                } else {
+                    col = col.concat(idx + 1);
+                }
+            }
+        }
+        idx++;
+        if (idx == item.length) {
+            isStillLoop = false;
+            return pKeyCounter;
+        }
+    }
 
-return answer;
+    function isExistDupData(data) {
+        return data.filter((item, i) => {
+            return i < 8 && (data.indexOf(item) != i)
+        }).length > 0
+    }
+
+    function getCurrentCol(data, i) {
+        if (i.length > 1) {
+            var tempRet = [];
+            arrA = data.map((res) => {
+                return res[i[0]]
+            })
+
+            arrB = data.map((res) => {
+                return res[i[1]]
+            })
+
+            arrA.forEach((item, i) => {
+                tempRet.push(arrA[i] + '::' + arrB[i]);
+            })
+
+            return tempRet;
+        } else {
+            return data.map((res) => {
+                return res[i]
+            })
+        }
+    }
+
+    function isValidStrLength(data) {
+        return data.filter((item, i) => {
+            return (item.split('::').filter((res)=>{
+                return res.length >= 1 && res.length <= 8
+            }).length == item.split('::').length)
+        }).length > 0
+    }
+
+    function isValidStrLowerCase(temp) {
+        for (let index = 0; index < temp.length; index++) {
+            if (temp[index] === temp[index].replace(/[0-9]/g, '').toUpperCase()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

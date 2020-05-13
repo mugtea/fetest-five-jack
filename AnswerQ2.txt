@@ -1,36 +1,40 @@
-    
-    function solutionsQ2(N, params){
-    var answer = [];
-        paramsLeft = params.length
-    tempResult = [];
-    for(var i = 0 ; i<N;i++){
-        var temp = {};
-        stageCounter = params.filter((res)=>{
-            return res == i+1
-        }).length;
-        temp.failureRate = stageCounter/paramsLeft;
-        temp.stage = i+1;
-        paramsLeft = paramsLeft - stageCounter;
-        tempResult.push(temp);
-    }
 
-    function compare(a,b){
-        const failureRateA = a.failureRate;
-        const failureRateB = b.failureRate;
-        
-        let comparison = 0;
-        if (failureRateA > failureRateB)
-        comparison = -1
-        
-        if (failureRateB > failureRateA)
-        comparison = 1
-        return comparison;
-        }
+            function solutionsQ2(N, params) {
+                if (N < 1 || N > 500)
+                    return 'stage must between 1 - 500';
+                if (params.length < 1 || params.length > 200000)
+                    return 'length of array user must between 1 - 200.000'
 
-        answer = tempResult.sort(compare);
-        answer = answer.map((res)=>{
-            return res.stage;
-        })
-        return answer;
-    }
+                var answer = [];
+                paramsLeft = params.length
+                for (var i = 0; i < N; i++) {
+                    var temp = {};
+                    stageCounter = params.filter((res) => {
+                        return res == i + 1
+                    }).length;
+                    temp.failureRate = stageCounter / paramsLeft;
+                    temp.stage = i + 1;
+                    paramsLeft = paramsLeft - stageCounter;
+                    answer.push(temp);
+                }
+
+                function compare(a, b) {
+                    const failureRateA = a.failureRate;
+                    const failureRateB = b.failureRate;
+                    const stageLevelA = a.stage;
+                    const stageLevelB = b.stage;
+                    let comparison = 0;
+                    if ((failureRateA == failureRateB && stageLevelA < stageLevelB) || (failureRateA > failureRateB)) {
+                        comparison = -1
+                    } else if ((failureRateB == failureRateA && stageLevelA > stageLevelB) || (failureRateB > failureRateA)) {
+                        comparison = 1
+                    }
+                    return comparison;
+                }
+
+                answer = answer.sort(compare).map((res) => {
+                    return res.stage;
+                })
+                return answer;
+            }
 
